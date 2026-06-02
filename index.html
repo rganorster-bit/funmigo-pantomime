@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -17,98 +17,175 @@ margin:0;
 
 .box{
 background:white;
-padding:40px;
+padding:30px;
 border-radius:20px;
 text-align:center;
 box-shadow:0 0 15px rgba(0,0,0,0.1);
-max-width:500px;
+max-width:600px;
+width:90%;
 }
 
 h1{
 color:#ff6600;
 }
 
-.phrase{
-font-size:32px;
+#phrase{
+font-size:34px;
 font-weight:bold;
 margin:30px 0;
+min-height:60px;
+}
+
+button{
+padding:15px 25px;
+font-size:20px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+margin:8px;
+}
+
+.success{
+background:#4CAF50;
+color:white;
+}
+
+.skip{
+background:#ff9800;
+color:white;
+}
+
+.start{
+background:#2196F3;
+color:white;
+}
+
+#game{
+display:none;
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="box">
 
+<div id="startScreen">
 <h1>🎭 פנטומימה</h1>
+<p>יש לכם 60 שניות להספיק כמה שיותר ביטויים</p>
+<button class="start" onclick="startGame()">▶ התחל משחק</button>
+</div>
 
-<div class="phrase" id="phrase"></div>
+<div id="game">
+<h2>⏱ זמן: <span id="time">60</span></h2>
+
+<div id="phrase"></div>
+
+<button class="success" onclick="success()">✅ הצלחנו</button>
+<button class="skip" onclick="nextPhrase()">⏭ דלג</button>
+
+<h3>🏆 ניקוד: <span id="score">0</span></h3>
+</div>
 
 </div>
 
 <script>
 
 const phrases = [
-
-"חתול בשק",
+"לשבת על הגדר",
 "לשבור את הקרח",
-"מים גנובים ימתקו",
-"על קצה הלשון",
+"חתול בשק",
+"ראש גדול",
+"ראש קטן",
 "בין הפטיש לסדן",
 "ללכת על ביצים",
 "יצא המרצע מן השק",
-"ראש קטן",
-"ראש גדול",
+"על קצה הלשון",
+"מים גנובים ימתקו",
 "יד ימין",
-"אורח לרגע",
-"סוף העולם שמאלה",
-"לעוף על עצמך",
-"לאכול את הכובע",
-"להרים ידיים",
-"לפתוח דף חדש",
-"לשמור בבטן",
-"לעמוד על שלך",
-"לקפוץ למים",
-"לשים רגל",
-"להוריד פרופיל",
-"להדליק נורה",
-"לשבת על הגדר",
-"לתפוס גובה",
-"לקבור את הראש בחול",
-"לאבד את הראש",
-"להרים את האף",
-"לרדת מהפסים",
-"להיות בעננים",
-"לשחות נגד הזרם",
-"ללכת עם הלב",
-"ללכת עם הראש בקיר",
-"לצאת מהכלים",
-"לאכול סרטים",
-"לבלוע צפרדע",
-"להיכנס ללחץ",
-"להחזיק אצבעות",
-"לפתוח את העיניים",
-"לעצום עיניים",
-"ללכת עד הסוף",
+"יד שמאל",
 "לעלות על הגל",
+"לרדת מהפסים",
+"לשפוך את התינוק עם המים",
+"לראות את האור",
+"לפתוח דף חדש",
+"לשים רגל",
+"לסגור עניין",
+"לאכול את הכובע",
+"לבלוע צפרדע",
+"ליפול מהרגליים",
+"למשוך בחוטים",
 "לשחק באש",
-"יד רוחצת יד",
-"ללכת בעקבות",
-"לשמור מרחק",
-"להיכנס לנעליים של מישהו",
-"ללכת בתלם",
+"לחפש מחט בערימת שחת",
+"לעלות מדרגה",
+"לגנוב את ההצגה",
+"לשים את כל הקלפים על השולחן",
+"לשחות נגד הזרם",
+"לתפוס שתי ציפורים במכה אחת",
+"לצאת מהקופסה",
+"לרקוד על שתי חתונות",
+"ללכת עד הסוף",
+"לספור עד עשר",
+"ללכת עם הלב",
+"לשבת בחיבוק ידיים",
+"לפתוח עיניים",
+"לסגור חשבון",
+"לשמור בבטן",
+"לעלות לראש",
+"לרדת לקרקע",
+"ללכת לאיבוד",
+"לתפוס ראש",
+"לזרום עם העניין",
 "לשבור שיא",
-"לקפוץ משמחה",
-"להוריד הילוך"
-
+"לסחוב על הגב",
+"לחיות בסרט",
+"ליפול בפח",
+"לתפוס גובה",
+"לפתוח את הפה"
 ];
 
-const randomPhrase =
-phrases[Math.floor(Math.random()*phrases.length)];
+let score = 0;
+let time = 60;
+let timer;
 
-document.getElementById("phrase").innerText =
-randomPhrase;
+function randomPhrase(){
+return phrases[Math.floor(Math.random()*phrases.length)];
+}
+
+function nextPhrase(){
+document.getElementById("phrase").innerText = randomPhrase();
+}
+
+function success(){
+score++;
+document.getElementById("score").innerText = score;
+nextPhrase();
+}
+
+function startGame(){
+
+document.getElementById("startScreen").style.display="none";
+document.getElementById("game").style.display="block";
+
+nextPhrase();
+
+timer = setInterval(function(){
+
+time--;
+document.getElementById("time").innerText = time;
+
+if(time<=0){
+
+clearInterval(timer);
+
+document.getElementById("game").innerHTML =
+"<h1>🏆 המשחק הסתיים!</h1><h2>הצלחתם "+score+" ביטויים</h2><button class='start' onclick='location.reload()'>שחקו שוב</button>";
+
+}
+
+},1000);
+
+}
 
 </script>
 
